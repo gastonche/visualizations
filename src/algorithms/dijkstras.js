@@ -10,8 +10,6 @@ function dijkstras(grid, start, finish) {
         sortByDistance(nodes);
         const closest = nodes.shift();
 
-        console.log(closest);
-
         if(closest.isWall) continue;
         
         if(closest.distance === Infinity) return {visitedNodes};
@@ -43,7 +41,6 @@ function updateNeighbours(nodes, node) {
         neighbours[i].distance = node.distance + 1;
         neighbours[i].previousNode = node;
     }
-    console.log(neighbours);
 }
 
 function getNeighbours(grid, node) {
