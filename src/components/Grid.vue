@@ -17,7 +17,6 @@
 
 <script>
 import Node from './Node';
-import {debounce} from '../services/utils';
 
 export default {
     name: 'grid',
