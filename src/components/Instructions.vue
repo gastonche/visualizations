@@ -31,6 +31,8 @@ export default {
         overflow: auto;
         max-width: 300px;
         max-height: 400px;
+        padding: 3px;
+        box-sizing: border-box;
     }
 
     h4{

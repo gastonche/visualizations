@@ -1,15 +1,15 @@
 <template>
   <div id="app">
-    <dijkstras/>
+    <algorithms/>
   </div>
 </template>
 
 <script>
-import Dijkstras from './components/Dijsktras';
+import Algorithms from './components/Algorithms';
 export default {
   name: 'app',
   components: {
-    Dijkstras
+    Algorithms
   }
 }
 </script>
@@ -19,8 +19,8 @@ export default {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
+  font-size: 12px;
 }
 
 body{
@@ -29,7 +29,7 @@ body{
 
 .bar {
   height: 60px;
-  background: #ccc;
+  background: lightslategray;
   display: flex;
   align-items: center;
   justify-content: space-between;

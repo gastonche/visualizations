@@ -12,9 +12,18 @@
                 </div>
                 <button class="action">Update Grid</button>
             </form>
-            <button class="action reset" @click="reset">
-                Reset
-            </button>
+            <div>
+                <button class="action reset" @click="clear">
+                    Clear
+                </button>
+                <button class="action reset" @click="reset">
+                    Reset
+                </button>
+                 <button class="action visualize" @click="$emit('visualize')">
+                    Visualize
+                </button>
+            </div>
+            
         </div>
         <grid
             :grid="grid"
@@ -97,6 +106,15 @@ export default {
             this.change([]);
             this.$nextTick(() => this.change(createGrid(this.height, this.width)));
         },
+        clear() {
+            const grid = this.grid;
+            this.change([]);
+            this.$nextTick(() => this.change(clean(grid)));
+
+            function clean(nodes) {
+                return nodes.map(row => row.map(col => ({...col, isVisited: false})))
+            }
+        }
     },
     mounted() {
         this.reset();
@@ -109,4 +127,10 @@ export default {
         margin-bottom: 10px;
         background-color: #b8d7e8;
     }
+
+    .visualize{
+        background: teal;
+        color: white;
+    }
+
 </style>

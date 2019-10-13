@@ -52,6 +52,11 @@ export default {
 </script>
 
 <style>
+    .grid{
+        margin: auto;
+        width: fit-content;
+    }
+    
     .row{
         height: 20px;
         white-space: nowrap;

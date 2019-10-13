@@ -1,8 +1,9 @@
-import {getNeighbours, equal, getAllNodes, sortByDistance} from './utils';
+import { getAllNodes, sortByDistance, equal, getNeighbours } from './utils';
 
-function dijkstras(grid, start, finish) {
+function aStar(grid, start, finish) {
     grid = Object.assign([], grid);
     
+    grid[start.row][start.col].g = 0;
     grid[start.row][start.col].distance = 0;
 
     const nodes = getAllNodes(grid);
@@ -22,17 +23,24 @@ function dijkstras(grid, start, finish) {
 
         if(equal(closest, finish)) return {visitedNodes, completed: true};
 
-        updateNeighbours(grid, closest);
+        updateNeighbours(grid, closest, finish);
     }
 }
 
-
-function updateNeighbours(nodes, node) {
+function updateNeighbours(nodes, node, finish) {
     const neighbours = getNeighbours(nodes, node);
     for(let i in neighbours) {
-        neighbours[i].distance = node.distance + 1;
+        const neighbour = neighbours[i];
+        neighbour.g = node.g + 1;
+        neighbour.h = manHattanHeuristics(neighbour, finish);
+        neighbour.distance = neighbour.g + neighbour.h;
+
         neighbours[i].previousNode = node;
     }
 }
 
-export default dijkstras;
+function manHattanHeuristics(node, finish) {
+    return Math.abs(node.row - finish.row) + Math.abs (node.col - finish.col) 
+}
+
+export default aStar;

@@ -1,13 +1,19 @@
 <template>
     <div>
         <div class="bar">
-            <div class="left">
-                <h3>Dijkstras Algorithm</h3>
-            </div>
-            <div>
-                <button class="action" @click="visualize">
-                    Visualize
-                </button>
+            <h3>
+                {{selectedAlorigthm.name}} Visualizer
+            </h3>
+            <div class="menu">
+                <label for="select" @click="selecting = !selecting">Select Algorithm</label>
+                <div class="bg" v-if="selecting" @click="selecting = !selecting"></div>
+                <transition name="menu">
+                    <ul class="left" v-if="selecting">
+                        <li v-for="(algorithm, index) in algorithms" :key="index"  @click="selectedAlorigthm = algorithm; selecting = !selecting;">
+                            {{algorithm.name}}
+                        </li>
+                    </ul>
+                </transition>
             </div>
         </div>
         <grid-controller
@@ -17,11 +23,12 @@
             @gridChange="gridChange"
             @start="setStart"
             @finish="setFinish"
+            @visualize="visualize"
         />
         <instructions>
-            <template slot="title">Dijkstra's Algorithm</template>
+            <template slot="title">{{selectedAlorigthm.name}}</template>
             <h4>What is it:</h4>
-            <p>Dijkstra's algorithm (or Dijkstra's Shortest Path First algorithm, SPF algorithm)[1] is an algorithm for finding the shortest paths between nodes in a graph, which may represent, for example, road networks. It was conceived by computer scientist Edsger W. Dijkstra in 1956 and published three years later</p>
+            <p>{{selectedAlorigthm.description}}</p>
             <h4>How to Test It</h4>
             <p>
                 To test it do the following:
@@ -46,8 +53,8 @@
 
 <script>
 import GridController from './GridController';
-import dijkstras from '../algorithms/dijkstras';
 import Instructions from './Instructions';
+import algorithms from '../services/runners'
 
 //constants
 const START_POINT_COL = 0,
@@ -57,10 +64,13 @@ FINISH_POINT_COL = 19,
 SPEED = 20;
 
 export default {
-    name: 'dijkstras',
+    name: 'Algorithms',
     components: {GridController, Instructions},
     data() {
         return {
+            algorithms,
+            selectedAlorigthm: algorithms[0],
+            selecting: false,
             grid: [],
             startRow: START_POINT_ROW,
             startCol: START_POINT_COL,
@@ -76,7 +86,11 @@ export default {
     },
     methods: {
         visualize() {
-            const {visitedNodes, completed} = dijkstras(this.grid, this.startNode, this.finishNode);
+            // eslint-disable-next-line no-console
+            console.time(this.selectedAlorigthm.name);
+            const {visitedNodes, completed} = this.selectedAlorigthm.run(this.grid, this.startNode, this.finishNode);
+            // eslint-disable-next-line no-console
+            console.timeEnd(this.selectedAlorigthm.name);
             for(let i = 0; i <= visitedNodes.length; i++) {
                 if(i === visitedNodes.length && completed) {
                     this.visualizePath(visitedNodes[i - 1], i);
@@ -117,4 +131,58 @@ export default {
 </script>
 
 <style>
+    .menu{
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .menu label{
+        cursor: pointer;
+        height: 30px;
+        background: #fff;
+        border: 1px solid rgba(0,0,0,0.1);
+        padding: 5px;
+        box-sizing: border-box;
+    }
+
+    .menu ul{
+        background: #fff;
+        position: absolute;
+        top: 25px;
+        padding: 0;
+        list-style-type: none;
+        padding: 5px 0;
+        width: fit-content;
+        transition: all .3s;
+        z-index: 2;
+    }
+
+    .menu li{
+        padding: 3px;
+        border-bottom: 1px solid rgba(0,0,0,0.1);
+        white-space: nowrap;
+        cursor: pointer;
+    }
+
+    .menu-enter, .menu-leave-to{
+        top: 0;
+        opacity: 0;
+    }
+
+    .menu-enter-to, .menu-leave{
+        top: 25px;
+        opacity: 1;
+    }
+
+    .bg{
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        top: 0;
+        left: 0;
+        background: rgba(0,0,0,0.3);
+        z-index: 1;
+    }
 </style>
