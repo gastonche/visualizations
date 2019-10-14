@@ -14,10 +14,10 @@
             </form>
             <div>
                 <button class="action reset" @click="clear">
-                    Clear
+                    Clear Path
                 </button>
                 <button class="action reset" @click="reset">
-                    Reset
+                    Clear Walls
                 </button>
                  <button class="action visualize" @click="$emit('visualize')">
                     Visualize
